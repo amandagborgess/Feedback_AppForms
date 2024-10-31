@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Aplicativo de Feedback</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <h1>Deixe seu Feedback</h1>
+    <form id="feedbackForm">
+      <label for="name">Nome:</label>
+      <input type="text" id="name" required />
+
+      <label for="feedback">Feedback:</label>
+      <textarea id="feedback" required></textarea>
+
+      <button type="submit">Enviar</button>
+    </form>
+    <div id="message"></div>
+
+    <script>
+      const form = document.getElementById("feedbackForm");
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const name = document.getElementById("name").value;
+        const feedback = document.getElementById("feedback").value;
+
+        const response = await fetch("/feedback", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name, feedback }),
+        });
+
+        const messageDiv = document.getElementById("message");
+        if (response.ok) {
+          messageDiv.textContent = "Feedback enviado com sucesso!";
+          form.reset();
+        } else {
+          messageDiv.textContent = "Erro ao enviar feedback.";
+        }
+      });
+    </script>
+  </body>
+</html>
